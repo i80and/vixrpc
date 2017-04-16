@@ -1,12 +1,10 @@
 All messages are encoded as a MessagePack[1] array.
 
-Types
-=====
+# Types
 
 There are three types of types:
 
-Primitive
----------
+## Primitive
 
 These types have a direct mapping to a MessagePack type.
 
@@ -20,33 +18,27 @@ These types have a direct mapping to a MessagePack type.
   - This type may only appear in a method or signal return signal, and
     indicates that NO response message is expected.
 
-Enumeration
------------
+## Enumeration
 
-IDL
-~~~
+### IDL
 
     enum <name>:
         <name> = <int>
         ...
 
-Encoding
-~~~~~~~~
+### Encoding
 
 An enumeration is encoded as an integer.
 
-Structure
----------
+## Structure
 
-IDL
-~~~
+### IDL
 
     struct <name>:
         <name>: <type>
         ...
 
-Encoding
-~~~~~~~~
+### Encoding
 
 A structure is encoded as an array of elements.
 
@@ -60,36 +52,31 @@ would be encoded as:
 
     Array(str, str)
 
-Union
------
+## Union
 
-IDL
-~~~
+### IDL
 
     enum <name> = <type> | <type> | <type>...
 
-Encoding
-~~~~~~~~
+### Encoding
 
 An enum is encoded as a two-element array:
 
     Array(int, <value>)
 
-Message Types
-=============
+# Message Types
 
 There are four types of messages.
 
-Method Calls
-------------
+## Method Calls
 
 A method call is a client -> server request encoded in the following
 format:
 
-Array(
-    messageid: uint | nil,
-    methodid: uint,
-    args: ...)
+    Array(
+        messageid: uint | nil,
+        methodid: uint,
+        args: ...)
 
 messageid will be returned as part of the method response, allowing
 the server to handle multiple messages asynchronously. It MUST not
@@ -97,35 +84,32 @@ be reused before the method response is processed by the client.
 If the method returns the fireandforget type, then the messageid should
 be nil.
 
-methodid identifies a server method to call..
+methodid identifies a server method to call.
 
 The remainder of the message array is the argument list to be passed
 to the requested method.
 
-Method Response
----------------
+## Method Response
 
 A method response is a server -> client response with a 1:1 correspondence
 to a method call. It is encoded in the following format:
 
-Array(messageid: uint, args: ...)
+    Array(messageid: uint, args: ...)
 
 The messageid is the same as the messageid given in the corresponding
 method call.
 
-Signal
-------
+## Signal
 
 Sometimes a server must notify clients of an event. A signal is
 structurally identical to a method call, but operates server -> client.
 
-Array(
-    messageid: uint | nil,
-    signalid: uint,
-    args: ...)
+    Array(
+        messageid: uint | nil,
+        signalid: uint,
+        args: ...)
 
-Signal Response
----------------
+## Signal Response
 
 A signal may require a response from the client. This signal response is
 structurally identical to a method response.

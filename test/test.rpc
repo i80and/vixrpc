@@ -1,0 +1,85 @@
+enum Errno:
+    OK = 0
+    EACCES = 1
+    EBADF = 2
+    EBUSY = 3
+    EDQUOT = 4
+    EEXIST = 5
+    EFAULT = 6
+    EFBIG = 7
+    EINTR = 8
+    EINVAL = 9
+    EIO = 10
+    EISDIR = 11
+    ELOOP = 12
+    EMFILE = 13
+    ENAMETOOLONG = 14
+    ENFILE = 15
+    ENOENT = 16
+    ENOSPC = 17
+    ENOTDIR = 18
+    ENXIO = 19
+    EOPNOTSUPP = 20
+    EPERM = 21
+    EROFS = 22
+    ESPIPE = 23
+    ETXTBSY = 24
+    EWOULDBLOCK = 25
+
+struct Stat:
+    inode: i64
+    mode: i32
+    nlink: i32
+    uid: i32
+    gid: i32
+
+    atimesec: i64
+    atimens: i64
+
+    mtimesec: i64
+    mtimens: i64
+
+    ctimesec: i64
+    ctimens: i64
+
+    size: i64
+    blocks: i64
+    blocksize: i32
+
+union StatResult = Errno | Stat
+union PollResult = Errno | i32
+union ReadResult = Errno | bin
+union OpenResult = Errno | i64
+
+fn auth(version: u8, username: str, password: str) -> bool
+fn chown(path: str, uid: u32, gid: u32) -> errno
+fn close(fd: i32) -> errno
+fn closedir(dir: i32) -> errno
+fn fallocate(fd: i32, offset: u64, len: u64) -> errno
+fn flock(fd: i32, operation: u8) -> errno
+fn fstat(fd: i32) -> StatResult
+fn fsync(path: str, datasync: u8) -> errno
+fn fsyncdir(dir: i32, datasync: u8) -> errno
+fn ftruncate(fd: i32) -> errno
+fn link(target: str, createAt: str) -> errno
+fn mkdir(path: str, mode: i32) -> errno
+fn open(path: str, mode: i32, flags: i32) -> OpenResult
+fn opendir(path: str) -> OpenResult
+fn poll(fd: i32) -> PollResult
+fn read(fd: i32, nbytes: u32) -> ReadResult
+fn readdir(dir: i32, offset: i32) -> errno
+fn readlink(path: str) -> ReadResult
+fn rename(old: str, new: str) -> errno
+fn rmdir(path: str) -> errno
+fn stat(path: str) -> StatResult
+fn symlink(target: str, createAt: str) -> errno
+fn truncate(path: str, length: u64) -> errno
+fn unlink(path: str) -> errno
+fn utimens(path: str, sec: i64, ns: i64) -> errno
+fn write(fd: i32, data: bin, offset: u64) -> errno
+
+fn unit() -> fireandforget
+
+signal switch_mode() -> nil
+signal write() -> nil
+signal poll() -> fireandforget
